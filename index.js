@@ -5,8 +5,6 @@ const bodyParser = require('body-parser');
 const dotEnv = require('dotenv');
 const cors = require('cors');
 
-//const codes = require('./data/codes.json');
-
 const getCodeInfo = require('./src/codeInfoService');
 
 dotEnv.config();
@@ -33,6 +31,8 @@ app.post('/api/code', (req, res) => {
         })
 });
 
-app.listen(3001, () => {
-    console.log(`started at port 3001`);
+const port = process.env.PORT || 8080
+
+app.listen(port, () => {
+    console.log(`started at port ${port}`);
 });
