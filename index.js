@@ -5,7 +5,9 @@ const bodyParser = require('body-parser');
 const dotEnv = require('dotenv');
 const cors = require('cors');
 
-const codes = require('./data/codes.json');
+//const codes = require('./data/codes.json');
+
+const getCodeInfo = require('./src/codeInfoService');
 
 dotEnv.config();
 
@@ -15,26 +17,22 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.post('/api/codeinfo', (req, res) => {
-    let code = req.body.text;
-    let codeInfo = codes.find(el => el.code == code);
+app.post('/api/code', (req, res) => {
+    console.log(`Got command: ${JSON.stringify(req.body)}`);
 
-    let replyMessage;
-    if (false == /^\d{3}$/.test(code) || codeInfo == undefined) {
-        res.send({
-            text: `${code} is not a valid HTTP status code, try 200 for instance`
-        });
-    } else {
-        res.send( {
-            text: `*${code}* - ${codeInfo.desc}`,
-            attachments:
-            [
-                { text: `https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/${code}` }
-            ]
-        });
-    }
+    getCodeInfo(req.body.text)
+        .then(message => {
+            console.log(`OK: ${JSON.stringify(message)}`);
+
+            res.send(message);
+        })
+        .catch(error => {
+            console.log(`ERROR: ${error}`);
+
+            res.send(error).status(500);
+        })
 });
 
 app.listen(3001, () => {
-    console.log("started...");
+    console.log(`started at port 3001`);
 });
