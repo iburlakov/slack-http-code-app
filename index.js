@@ -6,8 +6,6 @@ const cors = require('cors');
 
 const getCodeInfo = require('./src/codeInfoService');
 
-dotEnv.config();
-
 const app = express();
 
 app.use(cors());
