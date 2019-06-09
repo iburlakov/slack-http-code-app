@@ -2,7 +2,6 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const dotEnv = require('dotenv');
 const cors = require('cors');
 
 const getCodeInfo = require('./src/codeInfoService');
