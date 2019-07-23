@@ -2,14 +2,16 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors');
+//const cors = require('cors');
+
+const fs = require('fs');
 
 const getCodeInfo = require('./src/codeInfoService');
 
 const app = express();
 
-app.use(cors());
-app.use(bodyParser.json());
+//app.use(cors());
+//app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.post('/api/code', (req, res) => {
@@ -28,8 +30,20 @@ app.post('/api/code', (req, res) => {
         })
 });
 
+app.get('/install', (req,res) => {
+    fs.readFile('./install.html', function (err, html) {
+        if (err) {
+            res.status(500)
+        } else {   
+            res.writeHeader(200, {"Content-Type": "text/html"});  
+            res.write(html);
+        }
+        res.end(); 
+    });
+});
+
 const port = process.env.PORT || 8080
 
 app.listen(port, () => {
-    console.log(`started at port ${port}`);
+    console.log(`Started at port ${port}`);
 });
